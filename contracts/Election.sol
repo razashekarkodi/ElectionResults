@@ -1,4 +1,4 @@
-pragma solidity 0.4.20;
+pragma solidity ^0.4.24;
 
 contract Election {
     struct Candidates {
@@ -16,25 +16,25 @@ contract Election {
         uint indexed _candidateId
     );
 
-    function Election () public {
+    constructor() public {
         addCandidate("Candidate-1");
         addCandidate("Candidate-2");
     }
 
     function addCandidate (string _name) private {
         candCount ++;
-        candidates[candidatesCount] = Candidates(candidatesCount, _name, 0);
+        candidates[candCount] = Candidates(candCount, _name, 0);
     }
 
     function vote (uint _candidateId) public {
         require(!voters[msg.sender]);
 
-        require(_candidateId > 0 && _candidateId <= candidatesCount);
+        require(_candidateId > 0 && _candidateId <= candCount);
 
         voters[msg.sender] = true;
 
-        candidates[_candidateId].voteCount ++;
+        candidates[_candidateId].votesCount ++;
 
-        votedEvent(_candidateId);
+        emit votedEvent(_candidateId);
     }
 }
